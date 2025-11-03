@@ -1,0 +1,84 @@
+name: Terraform AWS IAM User
+description: >
+  A Terraform module to create and manage AWS IAM Users with optional access keys,
+  login profiles, group attachments, and managed policy attachments. Includes tagging support
+  and secure handling of sensitive outputs.
+
+license: MIT
+provider: aws
+
+inputs:
+  - name: name
+    type: string
+    description: The name of the IAM user.
+    required: true
+
+  - name: create_login_profile
+    type: bool
+    description: Whether to create a login profile (console password) for the IAM user.
+    default: false
+
+  - name: create_access_key
+    type: bool
+    description: Whether to create an access key for the IAM user.
+    default: false
+
+  - name: groups
+    type: list(string)
+    description: List of IAM group names the user should be added to.
+    default: []
+
+  - name: managed_policy_arns
+    type: list(string)
+    description: List of IAM managed policy ARNs to attach to the user.
+    default: []
+
+  - name: tags
+    type: map(string)
+    description: A map of tags to assign to the IAM user.
+    default: {}
+
+outputs:
+  - name: user_name
+    description: The name of the created IAM user.
+  - name: user_arn
+    description: The Amazon Resource Name (ARN) of the IAM user.
+  - name: user_unique_id
+    description: The unique ID assigned by AWS to the IAM user.
+  - name: access_key_id
+    description: The AWS access key ID, if access key creation is enabled.
+  - name: secret_access_key
+    description: The secret access key value (only available at creation time).
+  - name: login_profile_password
+    description: The generated password for the IAM console login, if login profile creation is enabled.
+  - name: groups
+    description: A list of IAM groups that the user is associated with.
+  - name: attached_policies
+    description: A list of IAM managed policy ARNs attached to the user.
+  - name: tags
+    description: A mapping of all tags assigned to the IAM user.
+  - name: name
+    description: The name tag assigned to the IAM user (for reference).
+  - name: arn
+    description: Alias output for user_arn (for compatibility with external references).
+
+examples:
+  - name: Basic usage
+    content: |
+      module "iam_user" {
+        source = "path/to/terraform-aws-iam-user"
+
+        name                = "dev-user"
+        create_login_profile = true
+        create_access_key    = true
+        groups               = ["developers"]
+        managed_policy_arns  = ["arn:aws:iam::aws:policy/AdministratorAccess"]
+        tags = {
+          Environment = "dev"
+          Project     = "app1"
+        }
+      }
+
+maintainers:
+  - name: Vishal Yadav
+    github: vishal-yadav
