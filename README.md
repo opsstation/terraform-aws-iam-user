@@ -1,47 +1,41 @@
-# Terraform AWS IAM User
+# # 🏗️ Terraform AWS IAM User
 
-[![License](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
+
+[![OpsStation](https://img.shields.io/badge/Made%20by-OpsStation-blue?style=flat-square&logo=terraform)](https://www.opsstation.com)
+[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
+[![Terraform](https://img.shields.io/badge/Terraform-1.13%2B-purple.svg?logo=terraform)](#)
+[![CI](https://github.com/OpsStation/terraform-aws-ec2/actions/workflows/ci.yml/badge.svg)](https://github.com/OpsStation/terraform-aws-ec2/actions/workflows/ci.yml)
+
+> 🌩️ **A production-grade, reusable AWS Ec2 module by [OpsStation](https://www.opsstation.com)**
+> Designed for reliability, performance, and security — following AWS networking best practices.
+---
+
+## 🏢 About OpsStation
+
+**OpsStation** delivers **Cloud & DevOps excellence** for modern teams:
+- 🚀 **Infrastructure Automation** with Terraform, Ansible & Kubernetes
+- 💰 **Cost Optimization** via scaling & right-sizing
+- 🛡️ **Security & Compliance** baked into CI/CD pipelines
+- ⚙️ **Fully Managed Operations** across AWS, Azure, and GCP
+
+> 💡 Need enterprise-grade DevOps automation?
+> 👉 Visit [**www.opsstation.com**](https://www.opsstation.com) or email **hello@opsstation.com**
 
 ---
 
-## 📘 Description
+## 🌟 Features
 
-A Terraform module to create and manage **AWS IAM Users** with optional **access keys**, **login profiles**, **group attachments**, and **managed policy attachments**.
-Includes **tagging support** and **secure handling of sensitive outputs** for better security and automation in AWS IAM management.
+- ✅ Creates and manages **AWS IAM Users** with customizable configurations
+- ✅ Supports attaching **managed** and **inline IAM policies** to users
+- ✅ Optionally adds users to existing **IAM Groups**
+- ✅ Enables generation and management of **access keys** for programmatic access
+- ✅ Supports **login profile creation** for AWS Management Console access
+- ✅ Configurable **permissions boundaries**, **path**, and **tags**
+- ✅ Integrates seamlessly with **AWS IAM Policies**, **Roles**, and **Groups**
+- ✅ Enforces AWS best practices for **least-privilege** and **secure identity management**
+- ✅ Fully compatible with other **OpsStation Terraform modules**
 
----
 
-## ⚙️ Features
-
-- 👤 Create AWS IAM Users easily
-- 🔑 Optionally generate **access keys** and **login profiles**
-- 👥 Attach users to existing **IAM groups**
-- 📜 Attach **managed policies** directly to users
-- 🏷️ Supports custom **tags** via a tags map
-- 🔐 Securely handles **sensitive outputs** (passwords, keys)
-
----
-
-## 🧱 Provider Requirements
-
-| Name | Version | URL |
-|------|----------|-----|
-| **AWS Provider** | latest | [AWS Provider Docs](https://registry.terraform.io/providers/hashicorp/aws/latest) |
-
----
-
-## 🧩 Inputs
-
-| Name | Type | Default | Required | Description |
-|------|------|----------|-----------|-------------|
-| **name** | `string` | n/a | ✅ Yes | The name of the IAM user. |
-| **create_login_profile** | `bool` | `false` | ❌ No | Whether to create a login profile (console password) for the IAM user. |
-| **create_access_key** | `bool` | `false` | ❌ No | Whether to create an access key for the IAM user. |
-| **groups** | `list(string)` | `[]` | ❌ No | List of IAM group names the user should be added to. |
-| **managed_policy_arns** | `list(string)` | `[]` | ❌ No | List of IAM managed policy ARNs to attach to the user. |
-| **tags** | `map(string)` | `{}` | ❌ No | A map of tags to assign to the IAM user. |
-
----
 ## 🚀 Example Usage
 
 ### Basic Usage
@@ -62,25 +56,24 @@ module "iam_user" {
 }
 
 ---
+### 🔐 Outputs (AWS IAM User Module)
 
-## 📤 Outputs
+| Name                     | Description                                                                 |
+|---------------------------|------------------------------------------------------------------------------|
+| `id`                      | The unique identifier (ID) of the created **IAM User**.                     |
+| `arn`                     | The ARN (Amazon Resource Name) of the created **IAM User**.                 |
+| `name`                    | The name of the created **IAM User**.                                       |
+| `path`                    | The path to the IAM User within AWS IAM.                                   |
+| `create_date`             | The date and time when the IAM User was created.                            |
+| `unique_id`               | The stable and unique string identifying the IAM User.                      |
+| `user_policy_arns`        | A list of attached **managed policy ARNs** associated with the IAM User.    |
+| `inline_policies`         | A map of **inline IAM policies** directly attached to the IAM User.         |
+| `permissions_boundary`    | The ARN of the **permissions boundary policy** attached to the IAM User (if any). |
+| `login_profile`           | Details of the **login profile** (if console access is enabled).            |
+| `access_key_id`           | The **Access Key ID** created for programmatic access (if configured).      |
+| `secret_access_key`       | The **Secret Access Key** created for programmatic access (if configured).  |
+| `tags`                    | A mapping of **tags** assigned to the IAM User.                             |
 
-| Name | Description |
-|------|--------------|
-| `user_name` | The name of the created IAM user. |
-| `user_arn` | The Amazon Resource Name (ARN) of the IAM user. |
-| `user_unique_id` | The unique ID assigned by AWS to the IAM user. |
-| `access_key_id` | The AWS access key ID, if access key creation is enabled. |
-| `secret_access_key` | The secret access key value (only available at creation time). |
-| `login_profile_password` | The generated password for the IAM console login, if login profile creation is enabled. |
-| `groups` | A list of IAM groups that the user is associated with. |
-| `attached_policies` | A list of IAM managed policy ARNs attached to the user. |
-| `tags` | A mapping of all tags assigned to the IAM user. |
-| `name` | The name tag assigned to the IAM user (for reference). |
-| `arn` | Alias output for `user_arn` (for compatibility with external references). |
-
-
----
 ### ☁️ Tag Normalization Rules (AWS)
 
 | Cloud | Case      | Allowed Characters | Example                            |
@@ -88,3 +81,6 @@ module "iam_user" {
 | **AWS** | TitleCase | Any              | `Name`, `Environment`, `CostCenter` |
 
 ---
+
+### 💙 Maintained by [OpsStation](https://www.opsstation.com)
+> OpsStation — Simplifying Cloud, Securing Scale.

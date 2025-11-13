@@ -32,3 +32,5 @@ jobs:
       # Validate configuration
       - name: Terraform Validate
         run: terraform validate -no-color
+
+
