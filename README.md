@@ -39,23 +39,31 @@
 ## 🚀 Example Usage
 
 ### Basic Usage
+```hcl
+module "iam-user" {
+source      = "git::https://github.com/opsstation/terraform-aws-iam-user.git?ref=v1.0.0"
 
-module "iam_user" {
-  source = "path/to/terraform-aws-iam-user"
+name        = "iam-user"
+environment = "test"
+label_order = ["name", "environment"]
 
-  name                 = "dev-user"
-  create_login_profile = true
-  create_access_key    = true
-  groups               = ["developers"]
-  managed_policy_arns  = ["arn:aws:iam::aws:policy/AdministratorAccess"]
-
-  tags = {
-    Environment = "dev"
-    Project     = "app1"
-  }
+policy_enabled          = false
+policy                  = data.aws_iam_policy_document.default.json
+pgp_key                 = ""
+password_length         = 20
+password_reset_required = true
 }
 
----
+data "aws_iam_policy_document" "default" {
+statement {
+actions = [
+"ec2:Describe*"
+]
+effect    = "Allow"
+resources = ["*"]
+}
+}
+```
 ### 🔐 Outputs (AWS IAM User Module)
 
 | Name                     | Description                                                                 |
