@@ -9,8 +9,8 @@
 
 
 module "labels" {
-  source = "git::https://github.com/opsstation/terraform-aws-labels.git?ref=v1.0.0"
-
+  source      = "opsstation/labels/multicloud"
+  version     = "1.0.0"
   name        = var.name
   environment = var.environment
   repository  = var.repository
@@ -33,7 +33,7 @@ resource "aws_iam_user" "default" {
 
 resource "aws_iam_access_key" "default" {
   count   = var.enabled ? 1 : 0
-  user    = aws_iam_user.default[*].name[0]
+  user    = aws_iam_user.default[0].name
   pgp_key = var.pgp_key
   status  = var.status
 }
